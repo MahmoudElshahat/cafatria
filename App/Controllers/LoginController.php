@@ -64,7 +64,6 @@ class LoginController
         if (!$user) {
             return false;
         }
-        
         $this->user = $user;
         return password_verify($password, $user['password']);
     }
