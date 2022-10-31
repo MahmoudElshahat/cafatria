@@ -1,18 +1,14 @@
 <?php
 
 use App\Controllers\CartController;
-use  App\Controllers\HomeController;
+use App\Controllers\HomeController;
 
-use  App\Controllers\LoginController;
+use App\Controllers\LoginController;
 use App\Controllers\LogoutController;
 
-use App\Controllers\OrderController;
+use  App\Controllers\OrderController;
 
-use  App\Controllers\admin\HomeController;
-use  App\Controllers\admin\userController;
-use  App\Controllers\admin\productsController;
-use  App\Controllers\admin\orderController;
-use MvcPhp\Http\Route;
+use  MvcPhp\Http\Route;
 
 
 Route::get('home', [HomeController::class, 'index']);

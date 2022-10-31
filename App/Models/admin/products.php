@@ -2,7 +2,7 @@
 namespace App\Models\admin;
 use MvcPhp\Database\Model;
 // use Model;
-class Products extends Model
+class products extends Model
 {
     public function __construct($table)
     {

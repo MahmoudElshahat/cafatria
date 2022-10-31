@@ -18,7 +18,7 @@ class productsController
                JOIN categories
                ON
                products.category_id =categories.id";
-        $products=products::query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        $products=  products::query($sql)->fetchAll(PDO::FETCH_ASSOC);
         return view("../Dashboard/products/products",["products"=>$products]);
     }
     // add new product
