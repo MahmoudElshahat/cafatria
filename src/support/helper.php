@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\LoginController;
 use App\Models\Login;
 use App\Models\user;
 use Dotenv\Parser\Value;
@@ -169,6 +170,7 @@ if(!function_exists('auth'))
 {
        function auth()
        {
+       
             if(cookie()->has('login'))
             {
                 $token = cookie()->get('login');
@@ -179,8 +181,8 @@ if(!function_exists('auth'))
             }else{
                 $token = '';
             }
-            $user =  user::findone('remember_token' , $token);
-           
+       
+            $user =  user::query("select * from users where token= '$token'")->fetch();
             return $user;
         
        } 

@@ -46,6 +46,16 @@ class Request
        
     }
 
+    public function login()
+    {
+        return $this->path() == '/login' ? true : false;
+    }
+
+
+    public function AdminLogin()
+    {
+        return $this->path() == '/admin' ? true : false;
+    }
   
 
 }   

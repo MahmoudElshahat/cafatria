@@ -1,14 +1,7 @@
+<<<<<<< HEAD
+# ITI-PHP-MVC
+=======
 # ITI-PHP-MVC
 
 
-# add route function
-# add assets function to get public 
-
-# add requst function to all or get request data
-
-# add url function
-
-# add redirectTo function
-
-# add back function
-
+>>>>>>> af5c7fe21541bfe995231b3b6bed0f06bfaf1dcc

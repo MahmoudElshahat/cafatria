@@ -15,5 +15,3 @@ require_once base_path() . "/src/Database/DB.php";
 require_once base_path() . "/src/Database/Model.php";
 require_once base_path() . '/routes/web.php';
 app()->run();
-
-

@@ -10,15 +10,15 @@ class Model{
         return \DB::selectAll(Model::$table);
     }
 
-    public static function find($id){
+    public static function find($col,$value){
 
-        return \DB::selectone(Model::$table,$id);
+        return \DB::selectone(Model::$table,$col,$value);
+    }
+    public static function findone($key , $val){
+
+        return \DB::selectone(Model::$table,$key,$val);
     }
 
-    public static function findone($key ,  $val){
-
-        return \DB::selectsingle(Model::$table,$key , $val);
-    }
 
     public static function create($arr_data){
        
@@ -35,5 +35,14 @@ class Model{
         return \DB::delete(Model::$table,$colName,$id);
     }
 
+    public static function query($query){
+       
+        return \DB::sql_query($query);
+    }
 
+    public static function join($sql, $table1,$table1_Col,$table2,$table2_Col){
+
+        return \DB::fjoin($sql, $table1,$table1_Col,$table2,$table2_Col);
+    }
+    
 }

@@ -10,11 +10,12 @@ class LoginController
 {
     protected $errors = [];
     public  $user;
+    private $token;
     public function index()
     {
         if($this->isLogged())
         {
-            return redirectTo('');
+            return redirectTo('home');
         }
         return view('login', ['errors' => $this->errors]);
     }
@@ -25,14 +26,14 @@ class LoginController
        {
         if(request()->get('remember'))
         {
-            cookie()->set('login', $this->user['remember_token']);
+            cookie()->set('login', $this->token);
         }else{
           
-            session()->set('login', $this->user['remember_token'] );
+            session()->set('login', $this->token );
             
         }
 
-            return redirectTo(' ');
+            return redirectTo('home');
        }else {
            return $this->index();
        }
@@ -74,8 +75,17 @@ class LoginController
             return false;
         }
 
-         $this->user = $user;
-        return password_verify($password, $user['password']);
+        if(password_verify($password, $user['password']))
+        {
+            $token = sha1(time()*rand(1,200));
+            $id = $user['id'];
+            user::query("UPDATE users SET token='$token' where id=$id");
+             $this->token = $token;
+             $this->user = $user;
+             
+             return true;
+        }
+        return false;
     }
 
     public function isLogged()
@@ -90,8 +100,7 @@ class LoginController
         }else{
             $token = '';
         }
-        $user =  user::findone('remember_token' , $token);
-       
+        $user =  user::findone('token' , $token);
         $this->user = $user;
         if(!$user) return false;
         return true;
