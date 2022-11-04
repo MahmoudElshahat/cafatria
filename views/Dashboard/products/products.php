@@ -1,51 +1,48 @@
-<?php 
+<?php
 require_once "../views/Dashboard/header.php";
 ?>
- <h3>Items Details</h3>
 
- <a href="./products/add"  class="btn btn-primary">ADD Product</a>
- 
- <table class="table">
-    <thead class="thead-dark">
+<div class="container">
+  <div class="d-flex justify-content-between my-3">
+    <h2>Products Details</h2>
+    <a href="./products/add" class="btn btn-primary">ADD Product</a>
+
+  </div>
+  <hr>
+  <table class="table table-striped table-hover ">
+    <thead>
       <tr>
         <th scope="col">#</th>
         <th scope="col">Name</th>
         <th scope="col">Price</th>
         <th scope="col">image</th>
-        <th scope="col">Categgotie</th>
+        <th scope="col">Categories</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
-      <?php 
-         foreach($products as $product):
+      <?php
+      foreach ($products as $product) :
       ?>
-      <tr>
-        <th scope="row"><?php echo  $product["id"]?></th>
-        <td> <?php echo  $product["pName"]?></td>
-        <td><?php echo  $product["image"]?></td>
-        <td><img src="../public/assets/images/<?php echo $product["image"]?>" alt="product image"></td>
-        <td><?php echo  $product["cName"]?></td>
-        <td>
-          <form action="./products/edite" method="post">
-             <input type="text" name="productId"hidden value="<?php echo $product["id"]?>">
-             <input type="submit" class="btn btn-primary" value="Edite">
-          </form>
-        </td>
-        <td>
-        <form action="./products/delete" method="post">
-             <input type="text" name="pro_id" hidden value="<?php echo $product["id"]?>">
-             <input type="submit" class="btn btn-danger" value="Delete">
-          </form>
-        </td>
+        <tr>
+          <th scope="row"><?php echo  $product["id"] ?></th>
+          <td> <?php echo  $product["pName"] ?></td>
+          <td><?php echo  $product["price"] ?></td>
+          <td><img src="<?php echo assets("assets/images/" . $product['image']) ?>" alt="product image" class="w-10 img-fluid"></td>
+          <td><?php echo  $product["cName"] ?></td>
+          <td>
+            <a class="btn btn-success" href="<?php route('admin/products/edit') ?>?id=<?php echo $product['id'] ?>">Edit </a>
+            <a class="btn btn-danger" href="<?php route('admin/products/delete') ?>?id=<?php echo $product['id'] ?>">Delete </a>
+          </td>
 
-      </tr>
-  <?php 
-    endforeach
-  ?>
+        </tr>
+      <?php
+      endforeach
+      ?>
     </tbody>
   </table>
 
-
- <?php 
+</div>
+<?php
 require_once "../views/Dashboard/footer.php";
- ?>
+?>

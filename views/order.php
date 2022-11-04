@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>cafeteria</title>
     <!-- CSS only -->
     <link rel="stylesheet" href="<?= assets("assets/css/tooplate-wave-cafe.css") ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
@@ -38,10 +39,7 @@
                         <a class="nav-link active" href="#">MyOrders</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+
             </div>
         </div>
     </nav>
@@ -63,16 +61,22 @@
             </div>
         </form>
         <div class="row g-0 header-table">
-            <div class="col col-md-6 col-lg-3">
+            <div class="col col-md-6 col-lg-2">
                 <h2>Order Date</h2>
             </div>
-            <div class="col col-md-6 col-lg-3">
+            <div class="col col-md-6 col-lg-2">
                 <h2>status</h2>
             </div>
-            <div class="col col-md-6 col-lg-3">
+            <div class="col col-md-6 col-lg-2">
                 <h2>Total price</h2>
             </div>
-            <div class="col col-md-6 col-lg-3">
+            <div class="col col-md-6 col-lg-2">
+                <h2>Room</h2>
+            </div>
+            <div class="col col-md-6 col-lg-2">
+                <h2>Comment</h2>
+            </div>
+            <div class="col col-md-6 col-lg-2">
                 <h2>Action</h2>
             </div>
         </div>
@@ -80,33 +84,40 @@
             <?php foreach ($orders as $order) { ?>
                 <div class="order">
                     <div class="row g-0 bg-dark text-light py-2">
-                        <div class="col col-md-6 col-lg-3">
+                        <div class="col col-md-6 col-lg-2">
                             <h5><?= $order['created_at'] ?></h5>
                         </div>
-                        <div class="col col-md-6 col-lg-3">
+                        <div class="col col-md-6 col-lg-2">
                             <h5><?= $order['status'] ?></h5>
                         </div>
-                        <div class="col col-md-6 col-lg-3">
+                        <div class="col col-md-6 col-lg-2">
                             <h5><?= $order['total_price'] ?></h5>
+                        </div>
+                        <div class="col col-md-6 col-lg-2">
+                            <h5><?= $order['room_no'] ?></h5>
+                        </div>
+                        <div class="col col-md-6 col-lg-2">
+                            <h5><?= $order['comment'] ?></h5>
                         </div>
 
                         <?php if ($order['status'] == 'proceesing') { ?>
-                            <div class="col col-md-6 col-lg-3">
-                                <form action="<?php route("order/delete") ?>" method="post">
-                                    <input type="text" hidden name="order_id" value="<?= $order['id'] ?>">
-                                    <button class="btn btn-danger btn-sm"> Cancel</button>
-                                </form>
+                            <div class="col col-md-6 col-lg-2">
+                                <a class="btn btn-primary" href="<?php route('order/delete') ?>?id=<?php echo $order['id'] ?>">Cancel </a>
                             </div>
                         <?php } ?>
                     </div>
                 </div>
                 <div class="row g-0 my-5 p-3 product-cart">
+
                     <?php foreach ($products as $product) { ?>
+
                         <?php if ($product['order_id'] == $order['id']) { ?>
+
+
                             <div class="col col-lg-2">
-                                <img src='<?= assets("/assets/img/" . $product['image']) ?>' alt="Image" class="tm-list-item-img">
+                                <img src='<?= assets("assets/images/$product[image]") ?>' alt="Image" class="tm-list-item-img">
                                 <h5><?= $product['name'] ?></h5>
-                                <h5><?= $product['price'] ?> $ </h5>
+                                <h5><?= $product['price'] ?> </h5>
                             </div>
                         <?php } ?>
                     <?php } ?>
@@ -126,7 +137,7 @@
     </div>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-    <script src="public/assets/js/jquery-3.4.1.min.js"></script>
+    <script src='<?php echo assets("assets/js/jquery-3.4.1.min.js") ?>'></script>
     <script>
         function setVideoSize() {
             const vidWidth = 1920;

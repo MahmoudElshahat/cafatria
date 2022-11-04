@@ -6,7 +6,7 @@ use App\Models\Login;
 use App\Models\user;
 use MvcPhp\Cookie;
 
-class LoginController 
+class LoginController
 {
     protected $errors = [];
     public  $user;
@@ -24,7 +24,7 @@ class LoginController
     {
        if($this->isVaild())
        {
-        if(request()->get('remember'))
+        if(request()->post('remember'))
         {
             cookie()->set('login', $this->token);
         }else{
@@ -40,38 +40,32 @@ class LoginController
     }
     public function isVaild()
     {
-        $email = request()->get('email');
-        $password = request()->get('password');
+        $email = request()->post('email');
+        $password = request()->post('password');
 
-        if(!$email)
-        {
-            $this->errors[] = 'Please Insert your Email'; 
-        }else if(!filter_var($email, FILTER_VALIDATE_EMAIL))
-        {
-            $this->errors[] = 'Please Enter  Vaild Email '; 
+        if (!$email) {
+            $this->errors[] = 'Please Insert your Email';
+        } else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $this->errors[] = 'Please Enter  Vaild Email ';
         }
 
-        if(!$password)
-        {
-            $this->errors[] = 'Please Insert your password'; 
+        if (!$password) {
+            $this->errors[] = 'Please Insert your password';
         }
 
-        if(! $this->errors)
-        {
-            if(!$this->isVaildLogin($email , $password))
-            {
-                $this->errors[] = 'Please Insert Valid Data'; 
+        if (!$this->errors) {
+            if (!$this->isVaildLogin($email, $password)) {
+                $this->errors[] = 'Please Insert Valid Data';
             }
         }
         return empty($this->errors);
     }
 
 
-    public function isVaildLogin($email , $password)
+    public function isVaildLogin($email, $password)
     {
-        $user = user::findone('email' , $email);
-        if(!$user)
-        {
+        $user = user::findone('email', $email);
+        if (!$user) {
             return false;
         }
 
@@ -90,19 +84,17 @@ class LoginController
 
     public function isLogged()
     {
-        if(cookie()->has('login'))
-        {
-            $token = cookie()->get('login');
-        }else if(session()->has('login'))
-        {
-            $token = session()->get('login');
 
-        }else{
+        if (cookie()->has('login')) {
+            $token = cookie()->get('login');
+        } else if (session()->has('login')) {
+            $token = session()->get('login');
+        } else {
             $token = '';
         }
         $user =  user::findone('token' , $token);
         $this->user = $user;
-        if(!$user) return false;
+        if (!$user) return false;
         return true;
     }
 
@@ -110,5 +102,4 @@ class LoginController
     {
         return $this->user;
     }
-
 }

@@ -18,17 +18,21 @@ class Route
 
     public static function get($route, $action)
     {
+        
         self::$routes['get'][$route] = $action;
     }
 
     public static function post($route, $action)
     {
+      
         self::$routes['post'][$route]  = $action;
     }
 
     public function requestHandell()
     {
         $path = $this->request->path();
+        $path = explode('?', $path)[0];
+      
         $method = $this->request->method();
         $action = self::$routes[$method][$path] ?? false;
 

@@ -34,15 +34,37 @@ class Request
         }
 
         return false;
-     
     }
 
-    public function get($key)
+    public function get($key = null)
     {   
-       if($this->has($key))
+      
+        if($key == null)
         {
-            return $_REQUEST[$key];
+            return $_GET;
+        }else{
+            if($this->has($key))
+            {
+                return $_GET[$key];
+            }
         }
+       
+       
+    }
+
+    public function post($key = null)
+    {   
+        if($key == null)
+        {
+            return $_POST;
+        }else{
+
+            if($this->has($key))
+            {
+                return $_POST[$key];
+            }
+        }
+     
        
     }
 

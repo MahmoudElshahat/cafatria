@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Document</title>
+    <title>cafeteria</title>
     <!-- CSS only -->
-    <link rel="stylesheet" href="<?php echo assets('assets/css/tooplate-wave-cafe.css')?>">
+
+    <link rel="stylesheet" href="<?php echo assets('assets/css/tooplate-wave-cafe.css') ?>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <link rel="stylesheet" href="<?php echo assets("assets/fontawesome/css/all.min.css")?>"> <!-- https://fontawesome.com/ -->
+    <link rel="stylesheet" href="<?php echo assets("assets/fontawesome/css/all.min.css") ?>"> <!-- https://fontawesome.com/ -->
+
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400" rel="stylesheet" /> <!-- https://fonts.google.com/ -->
 
 
@@ -28,9 +30,18 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./order/get">MyOrders</a>
-                    </li>
+
+                    <?php if (auth()['role']) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="<?php route('admin') ?>">Dashboard</a>
+                        </li>
+                    <?php } else { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="./order/get">MyOrders</a>
+                        </li>
+                    <?php  }
+
+                    ?>
                     <li class="nav-item">
                         <a class="nav-link active" href="">
                             <?php echo  $user['name']; ?>
@@ -40,14 +51,13 @@
                         <a href="<?php route('logout') ?>" class="btn btn-danger">logout</a>
                     </li>
 
-
                 </ul>
 
 
-                <form class="d-flex" role="search" action="./search" method="post">
+                <!-- <form class="d-flex" role="search" action="./search" method="post">
                     <input class="form-control me-2" type="search" name="search" value="" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                </form> -->
             </div>
         </div>
     </nav>
@@ -76,7 +86,7 @@
                                     <div class="col col-lg-1">
                                         <form action="./cart/minusquantity" method="post">
                                             <input type="text" name="product_id" value="<?= $cartProduct['id'] ?>" hidden>
-                                            <input type="text" name="user_id" value="<?= $user['id'] ?>" hidden>
+
                                             <button type="submit" class=" btn btn-sm btn-dark ">
                                                 <h3> - </h3>
                                             </button>
@@ -89,7 +99,7 @@
                                     <div class="col col-lg-1">
                                         <form action="./cart/addquantity" method="post">
                                             <input type="text" name="product_id" value="<?= $cartProduct['id'] ?>" hidden>
-                                            <input type="text" name="user_id" value="<?= $user['id'] ?>" hidden>
+
                                             <button type="submit" class=" btn btn-sm btn-dark">
                                                 <h3> + </h3>
                                             </button>
@@ -104,7 +114,6 @@
                                     </div>
                                 </div>
                             <?php endforeach ?>
-                            <?php dump($cartProducts)?>
                             <?php if (count($cartProducts) > 0) { ?>
                                 <form action="./order/create" method="post">
                                     <div>
@@ -128,14 +137,28 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <?php if (auth()['role']) { ?>
+                                            <div class="form-group row gx-0 g-2 my-2 p-2">
+                                                <div class="col col-lg-3 text-light">
+                                                    <h2><label>User</label></h2>
+                                                </div>
+                                                <div class="col col-lg-3"> <select class="form-control" name="user_id" id="user">
+                                                        <option value="<?= auth()['id'] ?>"><?php echo auth()['name']  . "-" . auth()['id']  ?></option>
+                                                        <?php foreach ($users as $user) { ?>
+
+                                                            <option value="<?= $user['id'] ?>"><?php echo $user['name'] . "-" . $user['id'] ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+
+                                            </div>
+                                        <?php } ?>
                                         <div class="d-flex  text-light p-2 ">
                                             <h2 class="me-4">Total Price </h2>
                                             <h2 id="total-price">$ <?= $totalPrice ?> </h2>
                                         </div>
                                         <div class="d-flex justify-content-end m-3 p-2">
                                             <input type="text" name="total_price" value="<?= $totalPrice ?>" hidden>
-                                            <input type="text" hidden name="user_id" value="<?= $user['id'] ?>">
-
                                             <button class="me-2 form-buttons">Order Now</button>
 
                                         </div>
@@ -172,7 +195,7 @@
                                 <div class="tm-tab-content">
                                     <div class="tm-list">
                                         <div class="tm-list-item">
-                                            <img src="public/assets/img/<?= $product['image'] ?>" alt="Image" class="tm-list-item-img">
+                                            <img src='<?php echo assets("assets/images/$product[image]") ?>' alt="Image" class="tm-list-item-img">
                                             <div class="tm-black-bg tm-list-item-text">
                                                 <h3 class="tm-list-item-name"><?= $product['name'] ?><span class="tm-list-item-price">$<?= $product['price'] ?></span></h3>
                                                 <p class="tm-list-item-description">Here is a short description for the first item. Wave Cafe Template is provided by Tooplate.</p>
@@ -180,13 +203,13 @@
                                                     <?php if (!(in_array($product['id'], $cartProductsIds))) { ?>
                                                         <form action="./cart/addto" method="post">
                                                             <input type="text" name="product_id" value="<?= $product['id'] ?>" hidden>
-                                                            <input type="text" name="user_id" value="<?= $user['id'] ?>" hidden>
+
                                                             <button class="form-buttons">Add To Cart</button>
                                                         </form>
                                                     <?php } else { ?>
                                                         <form action="./cart/addquantity" method="post">
                                                             <input type="text" name="product_id" value="<?= $product['id'] ?>" hidden>
-                                                            <input type="text" name="user_id" value="<?= $user['id'] ?>" hidden>
+
                                                             <button class="form-buttons" style="background-color: #0cc; color:white">Add More</button>
                                                         </form>
                                                     <?php } ?>
@@ -211,12 +234,12 @@
     <div class="tm-video-wrapper">
         <i id="tm-video-control-button" class="fas fa-pause"></i>
         <video autoplay muted loop id="tm-video">
-            <source src="<?php assets("assets/video/wave-cafe-video-bg.mp4")?>" type="video/mp4">
+            <source src="<?php echo assets("assets/video/wave-cafe-video-bg.mp4") ?>" type="video/mp4">
         </video>
     </div>
     <!-- JavaScript Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-    <script src=" <?php echo assets("assets/js/jquery-3.4.1.min.js")?>"></script>
+    <script src=" <?php echo assets("assets/js/jquery-3.4.1.min.js") ?>"></script>
     <script>
 
 

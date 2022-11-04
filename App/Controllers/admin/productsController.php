@@ -18,7 +18,7 @@ class productsController
                JOIN categories
                ON
                products.category_id =categories.id";
-        $products=  products::query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        $products=products::query($sql)->fetchAll(PDO::FETCH_ASSOC);
         return view("../Dashboard/products/products",["products"=>$products]);
     }
     // add new product
@@ -30,11 +30,11 @@ class productsController
     // get data and add product
     public function store()
     {
-        if (isset($_POST)) {
+        if (request()->post()) {
 
-            $name = $_POST['name'];
-            $price = $_POST['price'];
-            $category = $_POST['categorieId'];
+            $name = request()->post('name');
+            $price = request()->post('price');
+            $category = request()->post('categorieId');
 
             $file = $_FILES['image'];
             $file_type = $_FILES['image']['type'];
@@ -53,57 +53,55 @@ class productsController
             }
     }
 
-    public function edite()
+    public function edit()
     {
-                $id=$_POST["productId"];
+                $id= request()->get('id');
                  $product=products::find("id",$id);
                  $categories=Categories::get();
-              return view("../Dashboard/products/edite",["productData"=>$product,"categorieData"=>$categories]);
+              return view("Dashboard/products/edit",["productData"=>$product,"categorieData"=>$categories]);
     }
     public function update()
     {
-
-        
-        if (isset($_POST)) {
-            $name = $_POST['name'];
-            $pro_id=$_POST["productId"];
-            $price = $_POST['price'];
-            $category = $_POST['categorieId'];
-            $img=products::find("id",$pro_id);
-           
-            $oldimage=$img["picture"];
-            $image='';
-
-            if($_FILES["image"]!=''){
-                $file = $_FILES['image'];
-                $file_type = $_FILES['image']['type'];
-                $arr = explode('/', $file_type);
-                $ext = end($arr);
-                $image = time() . ".$ext";
-                move_uploaded_file($file['tmp_name'], "../public/assets/images/" . $image);
-            }
-
-             if($image==''){
-                $image=$oldimage;
-             }
+        if (request()->post()) {
+            $id= request()->post('productId');
+            $name=request()->post('name');
+            $price=request()->post('price');
+            $category=request()->post('categorieId');
+       
+            $file = $_FILES['image'];
+          $image= request()->post('image');
+          if($file['name'])
+          {
+            $file_type = $_FILES['image']['type'];
+            $arr = explode('/', $file_type);
+            $ext = end($arr);
+            $image = time() . ".$ext";
+            $path = base_path()."public/assets/images/$image";
+      
+            move_uploaded_file($file['tmp_name'],$path);
             
             
+          }else{
+            $image = products::query("select image from products where id = $id")->fetch(PDO::FETCH_ASSOC)['image'];
+          }
+          
             $data = [
-                "name" => $name,
-                "price" =>  $price,
-                "picture" => $image,
-                "category_id" => $category,
+              "name" => $name,
+              "price" =>  $price,
+              "image" => $image,
+              "category_id" => $category,
             ];
-              Products::update($data,$pro_id);
-              dump("sucss");
-            //    return view("../Dashboard/prod", ["success" => "Product Added Successfully"]);
+              Products::update($data,$id);
+              // dump("sucss");
+               return back();
             }
         
     }
     // delete product
     public function delete()
     {
-        $id = $_POST["pro_id"];
+        $id = request()->get('id');
          products::destory("id",$id);
+         return back();
     }
 }

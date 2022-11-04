@@ -4,7 +4,7 @@ namespace App\Models;
 
 use MvcPhp\Database\Model;
 
-class user extends Model
+class User extends Model
 {
     public function __construct($table)
     {

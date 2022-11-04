@@ -2,33 +2,47 @@
 
 namespace App\Controllers\admin;
 use App\Models\admin\users;
+use App\Models\admin\rooms;
+use App\Models\admin\Products;
+
 class userController
 {
 
    public function index()
    {
      $usersData= users::get();
-      return view('../Dashboard/users/users',["usersData"=>$usersData]);
+   //   dump($usersData);
+      return view('../Dashboard/users/index',["usersData"=>$usersData]);
    }  
 // =================================================
    public function add()
    {
-      return view('../Dashboard/users/add');
+      $rooms=rooms::get();
+      return view('../Dashboard/users/add',["rooms"=>$rooms]);
    }  
 // =================================================
-public function get_add()
+public function store()
 {   
+
+
+   $file = $_FILES['image'];
+            $file_type = $_FILES['image']['type'];
+            $arr = explode('/', $file_type);
+            $ext = end($arr);
+            $image = time() . ".$ext";
+            move_uploaded_file($file['tmp_name'],"../public/assets/images/".$image);
    $userData=[
-      // "name"=>$_POST["name"],
-      "email"=>$_POST["email"],
-      "password"=>$_POST["password"],
-      // "password"=> password_hash($_POST["password"],PASSWORD_DEFAULT),
-      "room_no"=>1,
-      "ext"=>8
+      "name" => request()->post('name'),
+      "image"=>$image,
+      "email"=>request()->post('email'),
+      // "password"=>$_POST["password"],
+      "password"=> password_hash($_POST["password"],PASSWORD_DEFAULT),
+      "room_no"=>request()->post('room'),
+      "ext"=>request()->post('ext')
    ];
    users::create($userData);
-
-   return  dump($_POST["name"]);
+  return  header('Location:'.$_SERVER["HTTP_REFERER"]);
+   // return  dump($_POST["name"]);
 } 
 
 // =================================================
@@ -44,7 +58,7 @@ public function get_add()
    {
       
       users::destory("id",$_POST["userid"]);
-      return  header('Location:http://localhost/iti/php/iti-php-project/admin/users');
+      return  redirectTo('admin/users');
    } 
    
 // =================================================

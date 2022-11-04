@@ -16,7 +16,7 @@ class Model{
     }
     public static function findone($key , $val){
 
-        return \DB::selectone(Model::$table,$key,$val);
+        return \DB::selectsingle(Model::$table,$key,$val);
     }
 
 
@@ -43,6 +43,18 @@ class Model{
     public static function join($sql, $table1,$table1_Col,$table2,$table2_Col){
 
         return \DB::fjoin($sql, $table1,$table1_Col,$table2,$table2_Col);
+    }
+
+
+
+
+
+
+
+    public static function findAll($key,  $val)
+    {
+
+        return \DB::selectAllBaseBydKey(Model::$table, $key, $val);
     }
     
 }

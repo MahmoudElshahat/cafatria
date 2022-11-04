@@ -95,6 +95,52 @@ public static function selectsingle($table,$key , $val){
 
  }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ public  static function selectAllBaseBydKey($table, $key, $val)
+ {
+     return DB::$conn->query("SELECT * FROM $table WHERE $key='$val'")->fetchAll(PDO::FETCH_ASSOC);
+ }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }//end class
 
 DB::connect(

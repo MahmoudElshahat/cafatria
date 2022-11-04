@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Cart;
 use App\Models\Product;
 use App\Controllers\HomeController;
+use PDO;
 
 class CartController
 {
@@ -14,10 +15,11 @@ class CartController
 
     public function addToCart()
     {
-        //  $user_id=auth()['id'];
-        $user_id = $_REQUEST['user_id'];
+
+
+        $user_id = auth()['id'];
         $product_id = $_REQUEST['product_id'];
-        $product = Product::query("select * from products where id=$product_id;");
+        $product = Product::query("select * from products where id=$product_id;")->fetchAll(PDO::FETCH_ASSOC);
         Cart::create(["product_id" => $product[0]['id'], "user_id" => $user_id]);
         header("Location:" . $_SERVER['HTTP_REFERER']);
     }
@@ -30,14 +32,14 @@ class CartController
     public function plusQuantity()
     {
         $product_id = $_REQUEST['product_id'];
-        $user_id = $_REQUEST['user_id'];
+        $user_id = auth()['id'];
         Cart::query("UPDATE carts set quantity = quantity+1 WHERE `product_id`=$product_id and `user_id`=$user_id;");
         header("Location:" . $_SERVER['HTTP_REFERER']);
     }
     public function minusQuantity()
     {
         $product_id = $_REQUEST['product_id'];
-        $user_id = $_REQUEST['user_id'];
+        $user_id = auth()['id'];
 
         Cart::query("UPDATE carts set quantity = quantity-1 WHERE `product_id`=$product_id and `user_id`=$user_id and quantity>1;");
         header("Location:" . $_SERVER['HTTP_REFERER']);

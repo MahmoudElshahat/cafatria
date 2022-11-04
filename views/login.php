@@ -68,8 +68,7 @@
             <source src="<?php echo assets("assets/video/wave-cafe-video-bg.mp4") ?>" type="video/mp4">
         </video>
     </div>
-
-    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src=" <?php echo assets("assets/js/jquery-3.4.1.min.js")?>"></script>
     <script>
         function setVideoSize() {
             const vidWidth = 1920;
